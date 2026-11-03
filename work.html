@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mahmoor, selected work</title>
+<meta name="description" content="Concept websites and apps by Mahmoor: gym, dental clinic, real estate, online store, café and fitness app.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b0a0c">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<!-- Work-only page for Fiverr and Upwork: no prices, no contact details, no outside links. -->
+<nav class="nav" aria-label="Main"><span class="l"><span class="wm">Mahmoor</span></span></nav>
+<header class="wo-head">
+  <h1 class="rise">Selected work</h1>
+  <p class="rise">Websites and apps I designed and built for different kinds of business. Each one is a concept project, and the screens work: tap a time on the clinic site or add a shirt to the bag.</p>
+</header>
+<main>
+  <ul class="wo-list">
+    <li class="rise"><div data-mock="clinic" data-live></div><h2>Clearview Dental</h2><p>Clinic website with online appointments.</p></li>
+    <li class="rise"><div data-mock="store" data-live></div><h2>Thread &amp; Loom</h2><p>Online clothing store with products, bag and checkout.</p></li>
+    <li class="rise"><div data-mock="gym" data-live></div><h2>Ironhouse Gym</h2><p>Gym website with a bookable class timetable.</p></li>
+    <li class="rise"><div data-mock="estate"></div><h2>Harbour &amp; Hale</h2><p>Property search and listings for an estate agent.</p></li>
+    <li class="rise"><div data-mock="cafe"></div><h2>Brew Lane</h2><p>Café menu with order-ahead for collection.</p></li>
+    <li class="rise"><div data-mock="app"></div><h2>Pulse</h2><p>Fitness app for gym members, iPhone and Android.</p></li>
+  </ul>
+</main>
+<p class="wo-foot">© 2026 Mahmoor. All projects shown are concept work.</p>
+<script src="assets/js/screens.js"></script>
+<script>
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.1 });
+document.querySelectorAll('.rise').forEach((el, i) => { el.style.transitionDelay = (i % 2) * 60 + 'ms'; io.observe(el); });
+</script>
+</body>
+</html>
