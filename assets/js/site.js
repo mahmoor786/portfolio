@@ -1,32 +1,43 @@
-/* Mahmoor portfolio: content, currency, work index, scroll scene and the project brief. */
+/* Mahmoor portfolio: content, motion, currency and the project brief. */
 (function () {
   // ---- Contact details: replace these two before launch ----
   const WHATSAPP = '920000000000';      // international format, digits only (placeholder)
   const EMAIL = 'hello@mahmoor.dev';    // placeholder
 
   const WORK = [
-    { id: 'gym', name: 'Ironhouse Gym', kind: 'Fitness', what: 'Gym website with a class timetable you can book from.' },
-    { id: 'clinic', name: 'Clearview Dental', kind: 'Health', what: 'Clinic site with online appointments: pick a day, pick a time, done.' },
-    { id: 'estate', name: 'Harbour & Hale', kind: 'Real estate', what: 'Property search with listings, prices and a valuation request.' },
-    { id: 'store', name: 'Thread & Loom', kind: 'Online store', what: 'Clothing shop with products, a bag and checkout.' },
-    { id: 'cafe', name: 'Brew Lane', kind: 'Food', what: 'Café menu with prices and order-ahead for collection.' },
-    { id: 'app', name: 'Pulse', kind: 'Mobile app', what: 'Fitness app for gym members, on iPhone and Android.' }
+    { id: 'clinic', name: 'Clearview Dental', kind: 'Health', what: 'Clinic site with online appointments.', live: 1 },
+    { id: 'store', name: 'Thread & Loom', kind: 'Online store', what: 'Clothing shop with products and a bag.', live: 1 },
+    { id: 'gym', name: 'Ironhouse Gym', kind: 'Fitness', what: 'Gym site with a bookable class timetable.', live: 1 },
+    { id: 'estate', name: 'Harbour & Hale', kind: 'Real estate', what: 'Property search and listings.' },
+    { id: 'cafe', name: 'Brew Lane', kind: 'Food', what: 'Café menu with order-ahead.' },
+    { id: 'app', name: 'Pulse', kind: 'Mobile app', what: 'Fitness app for iPhone and Android.' }
   ];
   const PLANS = [
-    { name: 'Landing page', p: { USD: 299, GBP: 239, EUR: 279 }, what: 'One page built to turn visitors into enquiries', time: '5 days' },
-    { name: 'Business website', p: { USD: 699, GBP: 549, EUR: 649 }, what: 'Up to 5 pages, contact form, ready for Google', time: '10 days' },
-    { name: 'Custom WordPress', p: { USD: 999, GBP: 799, EUR: 929 }, what: 'Your own theme, with pages you can edit yourself', time: '14 days' },
-    { name: 'Online store', p: { USD: 1199, GBP: 949, EUR: 1099 }, what: 'Shopify or WooCommerce: products, payments, shipping', time: '3 weeks' },
-    { name: 'Web app', p: { USD: 2499, GBP: 1999, EUR: 2299 }, what: 'Logins, dashboards and bookings on your own data', time: 'from 4 weeks' },
-    { name: 'Mobile app', p: { USD: 2999, GBP: 2399, EUR: 2799 }, what: 'iPhone and Android, published to both stores', time: 'from 6 weeks' }
+    { name: 'Landing page', p: { USD: 299, GBP: 239, EUR: 279 }, what: 'One page built to turn visitors into enquiries.', time: '5 days', inc: ['1 page, mobile-first', 'Contact or booking form', '2 rounds of changes'] },
+    { name: 'Business website', p: { USD: 699, GBP: 549, EUR: 649 }, what: 'A complete site for a growing business.', time: '10 days', inc: ['Up to 5 pages', 'Contact form and map', 'Google setup', '2 rounds of changes'], best: 1 },
+    { name: 'Custom WordPress', p: { USD: 999, GBP: 799, EUR: 929 }, what: 'Your own theme, with pages you edit yourself.', time: '14 days', inc: ['Custom theme, no page builder', 'Edit text and photos yourself', 'Blog ready'] },
+    { name: 'Online store', p: { USD: 1199, GBP: 949, EUR: 1099 }, what: 'Shopify or WooCommerce, ready to sell.', time: '3 weeks', inc: ['Products and variants', 'Card payments', 'Shipping rates and order emails'] },
+    { name: 'Web app', p: { USD: 2499, GBP: 1999, EUR: 2299 }, what: 'Logins, dashboards and bookings on your data.', time: 'from 4 weeks', inc: ['Customer accounts', 'Admin panel', 'Your data in your own account'] },
+    { name: 'Mobile app', p: { USD: 2999, GBP: 2399, EUR: 2799 }, what: 'iPhone and Android from one build.', time: 'from 6 weeks', inc: ['Sign-in and notifications', 'Published to both stores', 'Matches your website'] }
   ];
+  const ICON = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const SERVICES = [
+    ['Landing pages', 'One focused page for an ad, a launch or an offer.', '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 14h8"/>'],
+    ['Business websites', 'A clear, fast site that makes the phone ring.', '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7 13h4M7 16h7"/><rect x="14" y="12" width="4" height="5" rx="1"/>'],
+    ['Custom WordPress', 'Your own theme that you can edit without me.', '<circle cx="12" cy="12" r="9"/><path d="M7 8l3 9 2-6 2 6 3-9"/>'],
+    ['Online stores', 'Shopify or WooCommerce, from products to payments.', '<path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8a3 3 0 016 0"/>'],
+    ['Web apps', 'Bookings, dashboards and customer accounts.', '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 4v16M11 9h6M11 13h4"/>'],
+    ['Mobile apps', 'iPhone and Android apps, published to both stores.', '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>']
+  ];
+  const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   const BUDGETS = [[0, 300], [300, 700], [700, 1500], [1500, null]];
   const RATE = { USD: 1, GBP: 0.8, EUR: 0.93 };
   const SYM = { USD: '$', GBP: '£', EUR: '€' };
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const $ = s => document.querySelector(s);
+  const esc = s => s.replace(/&/g, '&amp;');
   const fmt = (n, c) => SYM[c] + Math.round(n).toLocaleString('en-GB');
-  const round = (n) => n < 1000 ? Math.round(n / 50) * 50 : Math.round(n / 100) * 100;
+  const round = n => n < 1000 ? Math.round(n / 50) * 50 : Math.round(n / 100) * 100;
 
   let cur = (() => { try { return localStorage.getItem('cur'); } catch (e) { return null; } })();
   if (!SYM[cur]) {
@@ -38,95 +49,44 @@
     } catch (e) {}
   }
 
-  // ---- Hero: the six concept sites turning in the dark ----
-  const deck = $('#deck');
-  let deckLayout = null;
-  if (deck) {
-    const ORDER = ['clinic', 'store', 'gym', 'estate', 'cafe', 'app'];
-    const LIVE = { clinic: 1, store: 1, gym: 1 };
-    const tilt = document.createElement('div'); tilt.className = 'tilt'; deck.appendChild(tilt);
-    const cards = ORDER.map((id, i) => {
-      const c = document.createElement('div'); c.className = 'card';
-      c.innerHTML = `<div data-mock="${id}"${LIVE[id] ? ' data-live' : ''}></div>`;
-      c.style.transform = 'translate(-50%,-40%) scale(.86)'; c.style.opacity = '0';
-      tilt.appendChild(c); return c;
-    });
-    let active = 0, lastTouch = 0, visible = true;
-    const now = $('#now');
-    deckLayout = () => {
-      const n = cards.length, w = innerWidth, small = w < 760;
-      deck.style.setProperty('--cw', small ? '84vw' : '42vw');
-      const X = (small ? 0.34 : 0.25) * w, Z = small ? 190 : 280, R = small ? 32 : 30;
-      cards.forEach((c, i) => {
-        let o = (i - active + n) % n; if (o > n / 2) o -= n;
-        const a = Math.abs(o), hidden = a > 2;
-        c.style.transform = `translate(-50%,-50%) translateX(${o * X}px) translateZ(${-a * Z}px) rotateY(${-o * R}deg)`;
-        c.style.opacity = hidden ? '0' : '1';
-        c.style.filter = `brightness(${(1 - a * 0.3).toFixed(2)})`;
-        c.style.zIndex = String(10 - a);
-        c.classList.toggle('front', o === 0);
-      });
-      const w0 = WORK.find(x => x.id === ORDER[active]);
-      if (now && w0) now.innerHTML = `<strong>${w0.name.replace('&', '&amp;')}</strong>, ${w0.kind.toLowerCase()} concept`;
-    };
-    cards.forEach((c, i) => c.addEventListener('click', () => { if (i !== active) { active = i; lastTouch = performance.now(); deckLayout(); } }));
-    // one orchestrated moment: the stack fans out on load
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      cards.forEach((c, i) => { c.style.transitionDelay = (reduce ? 0 : i * 70) + 'ms'; });
-      deckLayout();
-      setTimeout(() => cards.forEach(c => { c.style.transitionDelay = '0ms'; }), 1600);
-    }));
-    addEventListener('resize', () => deckLayout());
-    new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(deck);
-    if (!reduce) {
-      setInterval(() => {
-        if (!visible || document.hidden || performance.now() - lastTouch < 6000) return;
-        active = (active + 1) % cards.length; deckLayout();
-      }, 3400);
-      // spring-like tilt toward the pointer
-      let tx = 0, ty = 0, rx = 0, ry = 0;
-      const hero = $('.hero');
-      hero.addEventListener('pointermove', e => {
-        const r = hero.getBoundingClientRect();
-        ty = ((e.clientX - r.left) / r.width - 0.5) * 12; tx = -((e.clientY - r.top) / r.height - 0.5) * 7;
-      }, { passive: true });
-      hero.addEventListener('pointerleave', () => { tx = ty = 0; });
-      hero.addEventListener('pointerdown', () => { lastTouch = performance.now(); }, { passive: true });
-      (function loop() {
-        rx += (tx - rx) * 0.07; ry += (ty - ry) * 0.07;
-        tilt.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
-        requestAnimationFrame(loop);
-      })();
-    }
+  // ---- Hero headline: split into words for the blur-in ----
+  const h1 = $('#hero-h');
+  if (h1) {
+    const words = h1.textContent.trim().split(/\s+/);
+    h1.setAttribute('aria-label', h1.textContent.trim());
+    h1.innerHTML = words.map((w, i) => `<span class="w" aria-hidden="true" style="transition-delay:${120 + i * 70}ms">${w}</span>`).join(' ');
+    requestAnimationFrame(() => requestAnimationFrame(() => h1.classList.add('in')));
   }
 
-  // ---- Work index with a sticky preview ----
-  const idx = $('#idx'), frame = $('#frame'), cap = $('#frame-cap');
-  if (idx) {
-    idx.innerHTML = WORK.map((w, i) => `<li><div class="ph"><div data-mock="${w.id}" style="--ar:16/10"></div></div><a href="#work" class="${i ? '' : 'on'}" data-id="${w.id}"><span class="n">${w.name.replace('&', '&amp;')}</span><span class="k">${w.kind}, concept</span></a></li>`).join('');
-    frame.innerHTML = '<div class="sizer"><div data-mock="gym"></div></div>' + WORK.map((w, i) => `<div class="${i ? '' : 'on'}" data-for="${w.id}"><div data-mock="${w.id}"></div></div>`).join('');
-    cap.textContent = WORK[0].what;
-    const act = a => {
-      idx.querySelectorAll('a').forEach(x => x.classList.toggle('on', x === a));
-      frame.querySelectorAll('[data-for]').forEach(d => d.classList.toggle('on', d.dataset.for === a.dataset.id));
-      cap.textContent = WORK.find(w => w.id === a.dataset.id).what;
-    };
-    idx.querySelectorAll('a').forEach(a => {
-      a.addEventListener('mouseenter', () => act(a));
-      a.addEventListener('focus', () => act(a));
-      a.addEventListener('click', e => { e.preventDefault(); act(a); });
-    });
+  // ---- Marquee: the concept screens, twice for a seamless loop ----
+  const track = $('#track');
+  if (track) {
+    const order = ['clinic', 'store', 'gym', 'estate', 'cafe', 'app'];
+    track.innerHTML = order.concat(order).map(id => `<div class="tile"><div data-mock="${id}"></div></div>`).join('');
   }
+
+  // ---- Work cards ----
+  const cards = $('#cards');
+  if (cards) {
+    cards.innerHTML = WORK.map(w => `<article class="pcard rise"><div class="shot"><div data-mock="${w.id}"${w.live ? ' data-live' : ''}></div></div><div class="meta"><div><h3>${esc(w.name)}</h3><p>${w.what}</p></div><span class="tag">${w.kind}</span></div></article>`).join('');
+  }
+  const svc = $('#svc');
+  if (svc) svc.innerHTML = SERVICES.map(([t, d, p]) => `<li class="rise">${ICON(p)}<h3>${t}</h3><p>${d}</p></li>`).join('');
   if (window.renderScreens) window.renderScreens();
 
   // ---- Prices ----
-  const menu = $('#menu');
+  const plans = $('#plans');
   function drawPrices() {
-    if (menu) {
-      const groups = [['Websites', PLANS.slice(0, 3)], ['Stores and apps', PLANS.slice(3)]];
-      menu.innerHTML = groups.map(([g, ps]) => `<div><h3>${g}</h3>${ps.map(p => `<a class="it" href="#start" data-plan="${p.name}"><span><span class="nm">${p.name}</span><small>${p.what}. Ready in ${p.time}.</small><span class="go">Choose ${p.name.toLowerCase()}</span></span><span class="pr">from ${fmt(p.p[cur], cur)}</span></a>`).join('')}</div>`).join('');
+    if (plans) {
+      plans.innerHTML = PLANS.map(p => `<div class="plan${p.best ? ' best' : ''}"><div class="nm">${p.name}${p.best ? '<span class="badge">Recommended</span>' : ''}</div>
+        <div class="pr"><small>from</small>${fmt(p.p[cur], cur)}</div><p class="what">${p.what} Ready in ${p.time}.</p>
+        <ul>${p.inc.map(i => `<li>${CHECK}<span>${i}</span></li>`).join('')}</ul>
+        <a class="btn${p.best ? '' : ' alt'}" href="#start" data-plan="${p.name}">Choose ${p.name.toLowerCase()}</a></div>`).join('');
     }
-    document.querySelectorAll('.cur button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.c === cur)));
+    const btns = [...document.querySelectorAll('.cur button')];
+    btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.c === cur)));
+    const pill = $('.cur .pill'), on = btns.find(b => b.dataset.c === cur);
+    if (pill && on) { pill.style.width = on.offsetWidth + 'px'; pill.style.transform = `translateX(${on.offsetLeft - 4}px)`; }
     drawBudgets();
   }
   document.querySelectorAll('.cur button').forEach(b => b.addEventListener('click', () => {
@@ -157,6 +117,7 @@
     chips($('#f-when'), 'when', 'radio', ['As soon as possible', 'Within a month', 'In 1 to 3 months', 'Just exploring']);
   }
   drawPrices();
+  addEventListener('resize', drawPrices);
 
   const val = n => (form.querySelector(`input[name="${n}"]:checked`) || {}).value || '';
   function message() {
@@ -174,73 +135,43 @@
   }
   function preview() { const p = $('#preview'); if (p && form) p.textContent = message(); }
   if (form) {
+    const err = $('#f-err');
+    const clearErr = () => { err.textContent = ''; $('#f-name').parentElement.removeAttribute('data-bad'); };
     form.addEventListener('input', () => { preview(); clearErr(); });
     form.addEventListener('change', preview);
     preview();
-    const err = $('#f-err');
-    function clearErr() { err.textContent = ''; $('#f-name').parentElement.removeAttribute('data-bad'); }
     form.addEventListener('submit', e => {
       e.preventDefault();
       const via = e.submitter ? e.submitter.dataset.via : 'wa';
       if (!val('need')) { err.textContent = 'Pick what you need first, or choose "Not sure yet".'; form.querySelector('input[name="need"]').focus(); return; }
       if (!$('#f-name').value.trim()) { err.textContent = 'Add your name so I know who is writing.'; $('#f-name').parentElement.setAttribute('data-bad', ''); $('#f-name').focus(); return; }
       const text = message();
-      const url = via === 'mail'
+      window.location.href = via === 'mail'
         ? `mailto:${EMAIL}?subject=${encodeURIComponent('Project brief: ' + val('need'))}&body=${encodeURIComponent(text)}`
         : `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
-      window.location.href = url;
     });
   }
-  // Preselect from hero buttons and price list
-  function choose(plan) {
-    if (!form) return;
-    const input = form.querySelector(`input[name="need"][value="${plan}"]`);
-    if (input) { input.checked = true; preview(); }
-  }
   document.addEventListener('click', e => {
-    const a = e.target.closest('[data-need], [data-plan]');
-    if (a) choose(a.dataset.need || a.dataset.plan);
+    const a = e.target.closest('[data-plan]');
+    if (!a || !form) return;
+    const input = form.querySelector(`input[name="need"][value="${a.dataset.plan}"]`);
+    if (input) { input.checked = true; preview(); }
   });
   const wa = $('#wa');
   if (wa) wa.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hi Mahmoor, I'd like to talk about a website for my business.")}`;
 
-  // ---- How it works: steps follow the scroll ----
-  const how = $('#how');
-  if (how) {
-    const lis = [...how.querySelectorAll('#steps li')], pairs = [...how.querySelectorAll('.pair')];
-    let last = -1;
-    const step = () => {
-      const r = how.getBoundingClientRect();
-      const t = Math.min(0.999, Math.max(0, -r.top / Math.max(1, r.height - innerHeight)));
-      const i = Math.floor(t * lis.length);
-      if (i === last) return; last = i;
-      lis.forEach((l, k) => l.classList.toggle('on', k === i));
-      pairs.forEach((p, k) => p.classList.toggle('on', k === i));
-    };
-    addEventListener('scroll', step, { passive: true }); step();
-  }
-
-  // ---- Fit display lines to the page width ----
-  function fit() {
-    const m = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--m')) || 30;
-    document.querySelectorAll('[data-fit]').forEach(el => {
-      el.style.fontSize = '100px';
-      const w = el.parentElement.clientWidth - 2 * m;
-      el.style.fontSize = (100 * w / el.getBoundingClientRect().width * 0.99) + 'px';
-    });
-  }
-  (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
-  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(fit, 120); });
-
-  // ---- Entrances: each group rises once, staggered 60ms ----
+  // ---- Entrances: each group eases in once, staggered ----
   const io = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    if (!e.isIntersecting) return;
+    const el = e.target; el.classList.add('in'); io.unobserve(el);
+    // hand the element back to its own hover styles once it has arrived
+    setTimeout(() => { el.classList.remove('rise', 'in'); el.style.transitionDelay = ''; }, 1000 + (parseInt(el.style.transitionDelay, 10) || 0));
   }), { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.rise').forEach(el => {
     const sib = [...el.parentElement.children].filter(c => c.classList.contains('rise'));
-    el.style.transitionDelay = (sib.indexOf(el) * 60) + 'ms';
+    el.style.transitionDelay = (Math.min(sib.indexOf(el), 5) * 70) + 'ms';
     io.observe(el);
   });
-  document.querySelectorAll('.idx a').forEach((el, i) => { el.classList.add('rise'); el.style.transitionDelay = ((i % 6) * 50) + 'ms'; io.observe(el); });
-
+  // hero copy follows the headline
+  document.querySelectorAll('.hero .rise').forEach((el, i) => { el.style.transitionDelay = (i === 0 ? 0 : 420 + i * 80) + 'ms'; });
 })();
