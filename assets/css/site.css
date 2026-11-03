@@ -65,19 +65,27 @@ img, svg { display: block; max-width: 100%; }
 .nav { position: absolute; inset: var(--m) var(--m) auto; display: flex; justify-content: space-between; align-items: center; z-index: 5; }
 .nav .l { display: flex; gap: 26px; align-items: center; font-size: 15px; }
 .nav .wm { font-weight: 600; font-size: 17px; text-decoration: none; letter-spacing: -0.01em; }
+.nav .l { font-size: 16px; }
 
-/* Hero: two lit screens in a dark room */
-.hero { position: relative; min-height: max(100svh, 720px); overflow: hidden; }
-.print { position: absolute; }
-.p1 { left: 56%; top: 13%; width: min(40vw, 720px); }
-.p2 { left: 6%; top: 21%; width: min(19vw, 340px); filter: brightness(0.6); }
-.p1 figcaption { margin-top: 12px; font-size: var(--step-small); color: var(--muted); }
-.hero .copy { position: absolute; left: var(--m); bottom: var(--m); width: min(52vw, 900px); }
-.hero h1 { font-weight: 400; font-size: var(--step-display); line-height: 1; letter-spacing: -0.03em; text-wrap: balance; }
-.hero .lead { margin-top: 22px; max-width: 44ch; color: var(--ink); }
-.need { margin-top: 26px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.need .q { width: 100%; font-size: 15px; color: var(--muted); margin-bottom: 2px; }
-.need .btn { min-height: 44px; padding: 0 18px; }
+/* Hero: the work itself, turning in the dark */
+.hero { position: relative; height: max(100svh, 680px); overflow: hidden; }
+.deck { position: absolute; left: 0; right: 0; top: 9%; height: 66%; perspective: 1700px; perspective-origin: 50% 40%; }
+.deck .tilt { position: absolute; inset: 0; transform-style: preserve-3d; }
+.deck .card {
+  position: absolute; left: 50%; top: 50%; width: var(--cw, 44vw); max-width: 760px;
+  transform-style: preserve-3d; cursor: pointer;
+  transition: transform 1100ms var(--ease-in-out), filter 1100ms var(--ease-in-out), opacity 900ms ease;
+  will-change: transform; backface-visibility: hidden; outline: 1px solid transparent;
+}
+.deck .card > .mk { box-shadow: 0 30px 80px -30px rgba(0,0,0,.8); }
+.deck .card .mk { pointer-events: none; }
+.deck .card.front { cursor: default; }
+.deck .card.front .mk { pointer-events: auto; }
+.hero-foot { position: absolute; left: var(--m); right: var(--m); bottom: var(--m); display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; }
+.hero h1 { font-weight: 300; font-size: clamp(3rem, 1rem + 6.4vw, 8.5rem); line-height: 0.92; letter-spacing: -0.045em; white-space: nowrap; }
+.hero-side { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; text-align: right; }
+.hero-side .now { font-size: 15px; color: var(--muted); min-height: 1.6em; transition: opacity 300ms ease; }
+.hero-side .now strong { color: var(--ink); font-weight: 400; }
 
 /* Section rhythm */
 main > section { padding-top: var(--gap-section); }
@@ -220,14 +228,14 @@ footer.site .legal { position: absolute; left: var(--m); bottom: 22px; font-size
 }
 @media (max-width: 760px) {
   :root { --m: 18px; }
-  .nav .l .lk { display: none; }
-  .hero { min-height: 0; display: flex; flex-direction: column; padding: 96px var(--m) 40px; }
-  .print { position: relative; }
-  .p1 { left: auto; top: auto; width: 100%; order: 2; margin-top: 34px; }
-  .p2 { display: none; }
-  .hero .copy { position: static; width: auto; order: 1; }
-  .hero h1 { font-size: 11vw; }
-  .hero .lead { font-size: 17px; }
+  .nav .l { gap: 18px; font-size: 15px; }
+  .nav .l .lk:last-child { display: none; }
+  .hero { height: max(100svh, 640px); }
+  .deck { top: 8%; height: 56%; perspective: 900px; }
+  .hero-foot { flex-direction: column; align-items: stretch; gap: 18px; }
+  .hero h1 { font-size: 15vw; white-space: normal; }
+  .hero-side { align-items: stretch; text-align: left; }
+  .hero-side .btn { width: 100%; }
   .work { grid-template-columns: 1fr; }
   .frame { display: none; }
   .idx .ph { display: block; margin: 30px 0 12px; }

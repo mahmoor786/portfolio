@@ -38,6 +38,68 @@
     } catch (e) {}
   }
 
+  // ---- Hero: the six concept sites turning in the dark ----
+  const deck = $('#deck');
+  let deckLayout = null;
+  if (deck) {
+    const ORDER = ['clinic', 'store', 'gym', 'estate', 'cafe', 'app'];
+    const LIVE = { clinic: 1, store: 1, gym: 1 };
+    const tilt = document.createElement('div'); tilt.className = 'tilt'; deck.appendChild(tilt);
+    const cards = ORDER.map((id, i) => {
+      const c = document.createElement('div'); c.className = 'card';
+      c.innerHTML = `<div data-mock="${id}"${LIVE[id] ? ' data-live' : ''}></div>`;
+      c.style.transform = 'translate(-50%,-40%) scale(.86)'; c.style.opacity = '0';
+      tilt.appendChild(c); return c;
+    });
+    let active = 0, lastTouch = 0, visible = true;
+    const now = $('#now');
+    deckLayout = () => {
+      const n = cards.length, w = innerWidth, small = w < 760;
+      deck.style.setProperty('--cw', small ? '84vw' : '42vw');
+      const X = (small ? 0.34 : 0.25) * w, Z = small ? 190 : 280, R = small ? 32 : 30;
+      cards.forEach((c, i) => {
+        let o = (i - active + n) % n; if (o > n / 2) o -= n;
+        const a = Math.abs(o), hidden = a > 2;
+        c.style.transform = `translate(-50%,-50%) translateX(${o * X}px) translateZ(${-a * Z}px) rotateY(${-o * R}deg)`;
+        c.style.opacity = hidden ? '0' : '1';
+        c.style.filter = `brightness(${(1 - a * 0.3).toFixed(2)})`;
+        c.style.zIndex = String(10 - a);
+        c.classList.toggle('front', o === 0);
+      });
+      const w0 = WORK.find(x => x.id === ORDER[active]);
+      if (now && w0) now.innerHTML = `<strong>${w0.name.replace('&', '&amp;')}</strong>, ${w0.kind.toLowerCase()} concept`;
+    };
+    cards.forEach((c, i) => c.addEventListener('click', () => { if (i !== active) { active = i; lastTouch = performance.now(); deckLayout(); } }));
+    // one orchestrated moment: the stack fans out on load
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      cards.forEach((c, i) => { c.style.transitionDelay = (reduce ? 0 : i * 70) + 'ms'; });
+      deckLayout();
+      setTimeout(() => cards.forEach(c => { c.style.transitionDelay = '0ms'; }), 1600);
+    }));
+    addEventListener('resize', () => deckLayout());
+    new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(deck);
+    if (!reduce) {
+      setInterval(() => {
+        if (!visible || document.hidden || performance.now() - lastTouch < 6000) return;
+        active = (active + 1) % cards.length; deckLayout();
+      }, 3400);
+      // spring-like tilt toward the pointer
+      let tx = 0, ty = 0, rx = 0, ry = 0;
+      const hero = $('.hero');
+      hero.addEventListener('pointermove', e => {
+        const r = hero.getBoundingClientRect();
+        ty = ((e.clientX - r.left) / r.width - 0.5) * 12; tx = -((e.clientY - r.top) / r.height - 0.5) * 7;
+      }, { passive: true });
+      hero.addEventListener('pointerleave', () => { tx = ty = 0; });
+      hero.addEventListener('pointerdown', () => { lastTouch = performance.now(); }, { passive: true });
+      (function loop() {
+        rx += (tx - rx) * 0.07; ry += (ty - ry) * 0.07;
+        tilt.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+        requestAnimationFrame(loop);
+      })();
+    }
+  }
+
   // ---- Work index with a sticky preview ----
   const idx = $('#idx'), frame = $('#frame'), cap = $('#frame-cap');
   if (idx) {
@@ -181,13 +243,4 @@
   });
   document.querySelectorAll('.idx a').forEach((el, i) => { el.classList.add('rise'); el.style.transitionDelay = ((i % 6) * 50) + 'ms'; io.observe(el); });
 
-  // ---- Signature: the two lit screens drift apart slowly as you leave the hero ----
-  if (!reduce) {
-    const p1 = $('.p1'), p2 = $('.p2');
-    if (p1 && p2) addEventListener('scroll', () => {
-      if (innerWidth < 760) return;
-      const y = Math.min(scrollY, innerHeight);
-      p1.style.translate = `0 ${-y * 0.12}px`; p2.style.translate = `0 ${-y * 0.05}px`;
-    }, { passive: true });
-  }
 })();
