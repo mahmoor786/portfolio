@@ -1,0 +1,222 @@
+---
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import { site, services, marquee, projects, fan, steps, plans, testimonials, about, needs } from '../data/site';
+import { url } from '../data/url';
+import { getPosts } from '../data/posts';
+
+const link = (p: (typeof projects)[number]) => p.href || url(`/work/${p.slug}/`);
+const shot = (slug: string) => url(`/work/${slug}.jpg`);
+const fanProjects = fan.map((s) => projects.find((p) => p.slug === s)!).filter(Boolean);
+const stageData = JSON.stringify(fanProjects.map((p) => ({ img: shot(p.slug), href: link(p), title: p.title })));
+const tileClass = (i: number) => (i === 0 ? 'big b7' : i === 1 ? 'big b5' : '');
+const posts = site.show.blog ? (await getPosts()).slice(0, 3) : [];
+const showQuotes = site.show.testimonials && testimonials.length > 0;
+const wa = `https://wa.me/${site.whatsapp.number}`;
+const initials = site.name.split(' ').map((w) => w[0]).join('');
+
+const jsonld = [
+  {
+    '@context': 'https://schema.org', '@type': 'ProfessionalService', name: site.name, description: site.description,
+    url: new URL(url('/'), Astro.site).href, image: new URL(url('/og.jpg'), Astro.site).href, email: site.email,
+    telephone: site.whatsapp.display, areaServed: 'Worldwide',
+    founder: { '@type': 'Person', name: site.name, jobTitle: site.role },
+    hasOfferCatalog: { '@type': 'OfferCatalog', name: 'Web design and development services',
+      itemListElement: services.map((s) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: s.title, description: s.text } })) },
+  },
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, url: new URL(url('/'), Astro.site).href },
+];
+---
+<Base jsonld={jsonld}>
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="bg"></div>
+    <div class="wrap">
+      <div class="chip" data-hero><i></i>{site.availability}</div>
+      <h1><span data-hero>{site.headline[0]}</span><span data-hero>{site.headline[1]}</span></h1>
+      <p class="intro" data-hero>{site.intro}</p>
+      <div class="cta" data-hero>
+        <a class="btn" href="#contact">Start a project</a>
+        <a class="link" href="#work">See the work ›</a>
+      </div>
+    </div>
+    <div class="stage" id="stage" data-projects={stageData}>
+      <div class="flat">
+        {fanProjects.map((p, i) => {
+          const k = i - (fanProjects.length - 1) / 2;
+          return (
+            <a href={link(p)} style={`--i:${k};--a:${Math.abs(k)}`} aria-label={`${p.title}, ${p.type}`}>
+              <img src={shot(p.slug)} alt={`${p.title}: ${p.type}`} width="1280" height="800" loading="eager" decoding="async" />
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="mq" aria-hidden="true">
+    <div>{[0, 1].map(() => [...marquee, ...marquee].map((w) => <><span>{w}</span><i>✦</i></>))}</div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="sec" id="services">
+    <div class="glow" style="left:-30%;top:10%;background:radial-gradient(#ffe1d2,transparent 65%)"></div>
+    <div class="wrap">
+      <div class="head">
+        <div data-reveal><p class="k">Services</p><h2 class="h2">Everything you need <span>to look great online.</span></h2></div>
+        <p data-reveal>From a single high-converting page to a full online store. Designed, built and launched by one person who cares about the details.</p>
+      </div>
+      <ul class="svc" data-reveal-group>
+        {services.map((s, i) => (
+          <li class="glass">
+            <span class="n">0{i + 1}</span>
+            <canvas data-icon={i} width="340" height="340" aria-hidden="true"></canvas>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+            <div>{s.points.map((p) => <span>{p}</span>)}</div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="sec" id="work">
+    <div class="glow" style="right:-30%;top:20%;background:radial-gradient(#d5dcff,transparent 65%)"></div>
+    <div class="wrap">
+      <div class="head">
+        <div data-reveal><p class="k">Selected work</p><h2 class="h2">Websites I've built. <span>Click one to step inside.</span></h2></div>
+        <p data-reveal>Each project opens as a live, working website, so you can try the real thing instead of looking at a screenshot.</p>
+      </div>
+      <div class="bento">
+        {projects.map((p, i) => (
+          <a class={`tile ${tileClass(i)}`} href={link(p)} style={`--c1:${p.tint[0]};--c2:${p.tint[1]};--ry:${p.tilt}deg`} data-reveal>
+            <h3 class="t">{p.title}{p.concept && <em>Concept</em>}<small>{p.type}</small></h3>
+            <span class="go" aria-hidden="true">↗</span>
+            <div class="shot"><img src={shot(p.slug)} alt={`Screenshot of ${p.title}, a ${p.type.toLowerCase()}`} width="1280" height="800" loading="lazy" decoding="async" /></div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="sec" id="process">
+    <div class="wrap">
+      <div class="head">
+        <div data-reveal><p class="k">Process</p><h2 class="h2">From idea to launch <span>in four clear steps.</span></h2></div>
+        <p data-reveal>You always know what happens next, and you see progress at every stage.</p>
+      </div>
+      <ol class="steps" data-reveal-group>
+        {steps.map((s, i) => (
+          <li><div class="d">0{i + 1}</div><h3>{s.title}</h3><p>{s.text}<br /><em>{s.when}</em></p></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  {site.show.pricing && (
+    <section class="sec" id="pricing">
+      <div class="glow" style="left:-25%;top:0;background:radial-gradient(#ecd9ff,transparent 65%)"></div>
+      <div class="wrap">
+        <div class="head">
+          <div data-reveal><p class="k">Pricing</p><h2 class="h2">Simple packages. <span>No surprises.</span></h2></div>
+          <p data-reveal>Pick the package closest to what you need, then tell me about your project for an exact quote.</p>
+        </div>
+        <div class="plans" data-reveal-group>
+          {plans.map((p) => (
+            <article class={`glass plan ${p.featured ? 'dark' : ''}`}>
+              <h3>{p.name}{p.featured && <span class="tag">Most popular</span>}</h3>
+              <p class="p">{p.price}<small>starting at</small></p>
+              <p class="s">{p.note}</p>
+              <ul>{p.points.map((x) => <li>{x}</li>)}</ul>
+              <a class="b" href="#contact" data-need={p.name}>Choose {p.name}</a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- TESTIMONIALS: off until site.show.testimonials is true AND real reviews are added -->
+  {showQuotes && (
+    <section class="sec" id="reviews">
+      <div class="wrap">
+        <div class="head"><div data-reveal><p class="k">Reviews</p><h2 class="h2">What clients say.</h2></div></div>
+        <div class="quotes">
+          {testimonials.map((t) => (
+            <figure class="glass quote" data-reveal style="margin:0">
+              <blockquote>“{t.quote}”</blockquote>
+              <figcaption class="who"><div class="av"></div><b>{t.name}</b>{t.role}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ABOUT -->
+  {site.show.about && (
+    <section class="sec" id="about">
+      <div class="glow" style="right:-30%;top:-10%;background:radial-gradient(#ffe1d2,transparent 65%)"></div>
+      <div class="wrap about">
+        <div class="pic" data-reveal>
+          {about.photo ? <img src={url('/' + about.photo)} alt={`Portrait of ${site.name}`} loading="lazy" /> : <b aria-hidden="true">{initials}</b>}
+        </div>
+        <div class="glass txt" data-reveal>
+          <p class="k">About</p>
+          <h2 class="h2">{about.heading[0]} <span>{about.heading[1]}</span></h2>
+          {about.paragraphs.map((p) => <p>{p}</p>)}
+          <ul>{about.points.map((p) => <li>{p}</li>)}</ul>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- BLOG -->
+  {posts.length > 0 && (
+    <section class="sec" id="blog">
+      <div class="wrap">
+        <div class="head">
+          <div data-reveal><p class="k">Blog</p><h2 class="h2">Notes on building <span>websites that work.</span></h2></div>
+          <a class="link" href={url('/blog/')} data-reveal>All articles ›</a>
+        </div>
+        <div class="posts">{posts.map((p, i) => <PostCard post={p} i={i} />)}</div>
+      </div>
+    </section>
+  )}
+
+  <!-- CONTACT -->
+  <section class="sec" id="contact">
+    <div class="wrap">
+      <div class="contact" data-reveal>
+        <div>
+          <p class="k">Contact</p>
+          <h2 class="h2">Let's build something <span>people remember.</span></h2>
+          <p class="lead">Tell me about your project and I'll reply with ideas and a quote.</p>
+          <a class="ln" href={`mailto:${site.email}`}>Email <span>{site.email} ↗</span></a>
+          <a class="ln" href={wa} target="_blank" rel="noopener">WhatsApp <span>{site.whatsapp.display} ↗</span></a>
+          {site.fiverr && <a class="ln" href={site.fiverr} target="_blank" rel="noopener">Fiverr <span>View profile ↗</span></a>}
+        </div>
+        <form class="glass form" id="brief" data-wa={site.whatsapp.number} data-email={site.email}>
+          <label for="f-name">Your name</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Jane Doe" required />
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" placeholder="jane@company.com" required />
+          <fieldset>
+            <legend>What do you need?</legend>
+            <div class="chips">
+              {needs.map((n, i) => <label><input type="radio" name="need" value={n} checked={i === 0} /><span>{n}</span></label>)}
+            </div>
+          </fieldset>
+          <label for="f-msg">Project details</label>
+          <textarea id="f-msg" name="details" placeholder="Tell me a little about it…" required></textarea>
+          <button class="btn" type="submit">Send on WhatsApp →</button>
+          <span class="alt">or <button type="button" id="viaemail">send it by email</button></span>
+        </form>
+      </div>
+    </div>
+  </section>
+</Base>

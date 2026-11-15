@@ -8,9 +8,13 @@ A portfolio website for **Mahmoor Ullah**, a freelance web designer and develope
 
 ## Current status
 
-**Planning is finished. Nothing is built yet.** The old site was deleted on purpose (the owner found it generic). The repo currently holds only these guides and the approved mockups.
+**The first version is built** (15 Nov 2026): home page with the 3D hero, services, work, process, pricing, about, blog preview and contact; a blog with three starter posts; five working demo sites. It builds cleanly and was checked in a browser at desktop and phone sizes.
 
-Next step: build the site as described in `docs/build-plan.md`. Update the status section of that file as work lands.
+**It is not live yet.** The code is on the branch `claude/portfolio-website-animations-zfywvr`. Going live needs the owner to merge it into `main` and switch on GitHub Pages (steps in `docs/build-plan.md`).
+
+Much of the content is still placeholder: prices, process timings, the About text and photo. See the open questions in `docs/brief.md`.
+
+Run it locally with `npm install` then `npm run dev`. Check `docs/build-plan.md` for what is done and what is left.
 
 ## Where things are
 
@@ -19,6 +23,8 @@ Next step: build the site as described in `docs/build-plan.md`. Update the statu
 | `docs/brief.md` | Who it is for, every content decision the owner made, real contact details, open questions |
 | `docs/design.md` | The approved design ("Glass" direction): colours, type, components, each section, motion |
 | `docs/build-plan.md` | Tech stack, folder layout, SEO and responsive requirements, blog workflow, deployment, build status |
+| `src/data/site.ts` | **All editable site content** and the on/off switches for sections |
+| `src/content/blog/` | Blog posts, one Markdown file each |
 | `docs/mockups/hero.jpg` | Approved hero mockup |
 | `docs/mockups/full-page.jpg` | Approved full-page mockup, hero to footer |
 | `docs/mockups/source/` | The throwaway Three.js code that rendered the mockups (scene `g` = hero, `z` = full page). Reference for the 3D card fan and chrome icons, not production code |

@@ -1,0 +1,19 @@
+---
+import { site } from '../data/site';
+import { url } from '../data/url';
+const links = [
+  ['Services', '/#services'],
+  ['Work', '/#work'],
+  site.show.pricing && ['Pricing', '/#pricing'],
+  site.show.about && ['About', '/#about'],
+  site.show.blog && ['Blog', '/blog/'],
+].filter(Boolean) as string[][];
+---
+<header class="nav" id="nav">
+  <a class="name" href={url('/')}>{site.name}</a>
+  <nav class="links" id="navlinks" aria-label="Main">
+    {links.map(([label, href]) => <a href={url(href)}>{label}</a>)}
+  </nav>
+  <a class="btn cta" href={url('/#contact')}>Get in touch</a>
+  <button class="menu" id="menubtn" aria-label="Menu" aria-expanded="false" aria-controls="navlinks"><i></i><i></i></button>
+</header>

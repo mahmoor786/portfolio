@@ -1,0 +1,18 @@
+---
+import { Image } from 'astro:assets';
+import { url } from '../data/url';
+import { fmtDate, tints } from '../data/posts';
+const { post, i = 0, h = 'h3' } = Astro.props;
+const H = h;
+const t = tints[i % tints.length];
+---
+<a class="post glass" href={url(`/blog/${post.id}/`)} data-reveal>
+  <div class="cover" style={`--c1:${t[0]};--c2:${t[1]};${post.data.cover ? 'padding:0' : ''}`}>
+    {post.data.cover ? <Image src={post.data.cover} alt="" width={800} /> : post.data.tags[0] && <span>{post.data.tags[0]}</span>}
+  </div>
+  <div class="in">
+    <H>{post.data.title}</H>
+    <p>{post.data.description}</p>
+    <time datetime={post.data.date.toISOString()}>{fmtDate(post.data.date)}</time>
+  </div>
+</a>

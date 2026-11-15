@@ -4,18 +4,41 @@
 
 - [x] Design direction chosen and full-page mockup approved
 - [x] Old site removed, guides written
-- [ ] Project scaffold (Astro) and deployment workflow
-- [ ] Design tokens, fonts, base layout, nav, footer
-- [ ] Hero with 3D card fan
-- [ ] Services, marquee, selected work, process, pricing
-- [ ] Testimonials (built, switched off)
-- [ ] About and contact
-- [ ] Blog: list page, post page, first sample post, RSS
-- [ ] Five demo showcase sites
-- [ ] SEO pass, responsive pass, performance pass
+- [x] Project scaffold (Astro) and deployment workflow
+- [x] Design tokens, fonts, base layout, nav, footer
+- [x] Hero with 3D card fan (deal-in animation, mouse tilt, hover lift, click to open, spreads on scroll)
+- [x] Services with 3D chrome icons, marquee, selected work, process, pricing
+- [x] Testimonials (built, switched off in `src/data/site.ts`)
+- [x] About (placeholder text, initials instead of a photo) and contact form (opens WhatsApp or email with the message filled in)
+- [x] Blog: list page, post page, three starter posts, RSS
+- [x] Five demo showcase sites under `/work/`, each with a small working interaction
+- [x] SEO basics: titles, descriptions, canonical, Open Graph image, JSON-LD, sitemap, robots, RSS
+- [x] Checked in a browser at 1440px and 390px: no errors, no sideways scroll
+- [ ] **Go live:** merge to `main`, make the repo public, set Pages source to "GitHub Actions"
+- [ ] Open the live URL and check it; run Lighthouse on the live site
+- [ ] Add the site to Google Search Console and submit the sitemap
+- [ ] Check at tablet width (768px) and on a real phone
 - [ ] Owner supplies real content (see open questions in `brief.md`)
 
+Not verified yet: the GitHub Pages deployment itself (the workflow has never run), Lighthouse scores, and real-device performance of the 3D.
+
 Tick items off here as they land, so the next session knows where things stand.
+
+## Going live (owner steps on GitHub)
+
+1. Merge the working branch into `main`.
+2. Repo Settings → General → make the repository **public** (free accounts can only publish public repos).
+3. Repo Settings → Pages → Source: **GitHub Actions**.
+4. The "Deploy to GitHub Pages" workflow then runs on every push to `main`. The site appears at `https://mahmoor786.github.io/portfolio/`.
+
+## Commands
+
+| Command | What it does |
+|---|---|
+| `npm install` | Install dependencies (once) |
+| `npm run dev` | Local preview at `http://localhost:4321/portfolio/` |
+| `npm run build` | Build the site into `dist/` |
+| `npm run capture` | Re-take the demo-site screenshots used in the hero and work tiles (run after `build`; needs Playwright) |
 
 ## Tech stack
 
@@ -29,21 +52,36 @@ Tick items off here as they land, so the next session knows where things stand.
 
 Free GitHub accounts can only serve Pages from a public repository. The site address will be `https://mahmoor786.github.io/portfolio/` unless the repo is renamed to `mahmoor786.github.io` or a custom domain is added. Set Astro's `site` and `base` to match, and re-check every internal link and asset path against the base.
 
-## Suggested layout
+## Layout
 
 ```
 src/
+  data/site.ts         ALL editable content and section on/off switches
+  data/url.ts          builds links that work under /portfolio/
+  data/posts.ts        loads and sorts blog posts
   content/blog/        one .md file per post
-  data/site.ts         ALL editable content: name, contact, services,
-                       prices, projects, process steps, feature switches
-  components/          one component per page section
-  layouts/             base layout (head, SEO tags), blog post layout
-  pages/               index, blog/index, blog/[slug], demo sites
-public/                favicon, fonts, images, robots.txt
-docs/                  these guides and the mockups
+  layouts/Base.astro   page shell: head, SEO tags, nav, footer
+  layouts/Demo.astro   shell for the demo sites (noindex, "concept" bar)
+  components/          Nav, Footer, PostCard
+  pages/index.astro    the home page, section by section
+  pages/blog/          blog list and post pages
+  pages/work/          the five demo sites
+  scripts/main.ts      menu, scroll animation, contact form, lazy-loads the 3D
+  scripts/scenes.ts    the 3D: hero card fan and service icons
+  styles/global.css    all styles for the main site
+public/
+  work/*.jpg           demo-site screenshots (made by `npm run capture`)
+  og.jpg               image shown when the site is shared
+scripts/capture.mjs    takes the demo screenshots
 ```
 
-Feature switches in `site.ts`, at minimum: `showTestimonials: false`.
+Things to know:
+
+- Always build links with `url()` from `src/data/url.ts`, never a bare `/path`, or they break under `/portfolio/`.
+- The hero shows a plain CSS fan of images until the 3D is ready, and keeps it if WebGL is unavailable.
+- Scroll animations only hide content when JavaScript is running; a 4-second fallback reveals everything if the script fails.
+- `robots.txt` is generated, but on a `github.io/portfolio/` address search engines only read the one at the domain root, so it takes effect once a custom domain is used. The sitemap can still be submitted in Search Console.
+- To add a real project: add it to `projects` in `site.ts` with `concept: false`, its live `href`, and a 1280×800 screenshot at `public/work/<slug>.jpg`.
 
 ## SEO requirements
 

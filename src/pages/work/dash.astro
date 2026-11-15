@@ -1,0 +1,67 @@
+---
+import Demo from '../../layouts/Demo.astro';
+const side = ['Overview', 'Customers', 'Orders', 'Products', 'Reports', 'Settings'];
+const rows = [['Northwind', 'Paid', 1240], ['Lumen Studio', 'Paid', 860], ['Kite & Co', 'Pending', 430], ['Harbor Foods', 'Paid', 2190], ['Atlas Gym', 'Refunded', 120]];
+---
+<Demo title="Dash" theme="#0e1320" cls="dash">
+  <div class="app">
+    <aside><a class="logo" href="#">dash.</a>{side.map((s, i) => <a class={i === 0 ? 'on' : ''} href="#">{s}</a>)}</aside>
+    <main>
+      <div class="bar"><h1>Overview</h1><div class="range"><button data-d="7">7 days</button><button class="on" data-d="30">30 days</button><button data-d="90">90 days</button></div></div>
+      <div class="stats">
+        <div><i style="background:#6d5cff"></i><small>Revenue</small><b id="s1">$48.2k</b></div>
+        <div><i style="background:#19c2ff"></i><small>Orders</small><b id="s2">1,284</b></div>
+        <div><i style="background:#ff7a45"></i><small>Returning customers</small><b id="s3">92%</b></div>
+      </div>
+      <div class="chart"><div class="ct"><b>Revenue over time</b><small id="cap">Last 30 days</small></div><svg id="svg" viewBox="0 0 900 340" preserveAspectRatio="none"></svg></div>
+      <div class="table">
+        <b>Recent orders</b>
+        {rows.map((r) => <p><span>{r[0]}</span><em class={String(r[1]).toLowerCase()}>{r[1]}</em><strong>${Number(r[2]).toLocaleString('en-US')}</strong></p>)}
+      </div>
+    </main>
+  </div>
+  <style is:global>
+    .dash{background:#0e1320;color:#fff}
+    .dash .app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+    .dash aside{background:#151c2e;padding:34px 26px;display:flex;flex-direction:column;gap:6px}
+    .dash .logo{font-weight:700;font-size:28px;margin-bottom:34px}
+    .dash aside a:not(.logo){padding:13px 16px;border-radius:12px;color:#8e9ac0;font-weight:500}
+    .dash aside .on{background:#6d5cff;color:#fff!important}
+    .dash main{padding:34px 4vw 60px;min-width:0}
+    .dash .bar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+    .dash h1{margin:0;font-size:clamp(30px,4vw,44px);letter-spacing:-.03em}
+    .dash .range{background:#151c2e;border-radius:12px;padding:4px}
+    .dash .range button{border:0;background:none;color:#8e9ac0;padding:9px 16px;border-radius:9px;font-weight:600;font-size:14px}.dash .range .on{background:#6d5cff;color:#fff}
+    .dash .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:22px}
+    .dash .stats div,.dash .chart,.dash .table{background:#1a2238;border-radius:20px;padding:26px}
+    .dash .stats i{display:block;width:80px;height:10px;border-radius:9px;margin-bottom:18px}
+    .dash small{color:#8e9ac0;font-size:14px}.dash .stats b{display:block;font-size:clamp(30px,3.6vw,46px);letter-spacing:-.03em;margin-top:6px}
+    .dash .ct{display:flex;justify-content:space-between;margin-bottom:14px}
+    .dash svg{width:100%;height:clamp(200px,30vw,340px);display:block}
+    .dash .table{margin-top:22px}.dash .table p{display:grid;grid-template-columns:1fr 110px 90px;align-items:center;margin:0;padding:15px 0;border-top:1px solid #263050;color:#c9d2ee}
+    .dash .table b{display:block;margin-bottom:14px}.dash strong{text-align:right;color:#fff}
+    .dash em{font-style:normal;font-size:12px;font-weight:600;padding:5px 10px;border-radius:99px;justify-self:start}
+    .dash .paid{background:rgba(55,214,140,.15);color:#37d68c}.dash .pending{background:rgba(255,190,70,.15);color:#ffbe46}.dash .refunded{background:rgba(255,110,110,.15);color:#ff6e6e}
+    @media(max-width:860px){.dash .app{grid-template-columns:1fr}.dash aside{flex-direction:row;overflow-x:auto;padding:16px;align-items:center}.dash .logo{margin:0 14px 0 0}.dash aside a{white-space:nowrap}.dash .stats{grid-template-columns:1fr}}
+  </style>
+  <script>
+    const svg = document.getElementById('svg')!;
+    const data: Record<string, [string, string, string]> = { '7': ['$11.6k', '302', '94%'], '30': ['$48.2k', '1,284', '92%'], '90': ['$139k', '3,720', '89%'] };
+    function draw(days: number) {
+      const n = 12, W = 900, H = 340; let seed = days * 13;
+      const r = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+      const line = Array.from({ length: n + 1 }, (_, i) => 250 - Math.sin(i * 0.7 + days) * 55 - i * 13 - r() * 20);
+      const bars = Array.from({ length: n }, () => 40 + r() * 110);
+      const pts = line.map((y, i) => `${(i * W) / n},${y}`).join(' ');
+      svg.innerHTML =
+        bars.map((h, i) => `<rect x="${i * (W / n) + 22}" y="${H - h}" width="30" height="${h}" rx="8" fill="rgba(25,194,255,.5)"/>`).join('') +
+        `<polyline points="${pts}" fill="none" stroke="#6d5cff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>`;
+      const d = data[String(days)];
+      ['s1', 's2', 's3'].forEach((id, i) => (document.getElementById(id)!.textContent = d[i]));
+      document.getElementById('cap')!.textContent = `Last ${days} days`;
+    }
+    const rb = document.querySelectorAll<HTMLButtonElement>('.dash .range button');
+    rb.forEach((b) => b.addEventListener('click', () => { rb.forEach((x) => x.classList.toggle('on', x === b)); draw(Number(b.dataset.d)); }));
+    draw(30);
+  </script>
+</Demo>

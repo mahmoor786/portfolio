@@ -1,0 +1,68 @@
+---
+import Demo from '../../layouts/Demo.astro';
+const items = [
+  { n: 'Wool overcoat', p: 240, c: '#ffb38a' }, { n: 'Knit cardigan', p: 120, c: '#9ad0c2' },
+  { n: 'Silk scarf', p: 65, c: '#c7b3ff' }, { n: 'Leather tote', p: 180, c: '#ffd66b' },
+  { n: 'Linen shirt', p: 85, c: '#f7a8b8' }, { n: 'Cord trousers', p: 110, c: '#a9c7f5' },
+  { n: 'Felt hat', p: 70, c: '#d9c7a3' }, { n: 'Chelsea boots', p: 210, c: '#b7d9a8' },
+];
+---
+<Demo title="Maison" theme="#fff7ee" cls="maison">
+  <header class="hero">
+    <nav><a class="logo" href="#">MAISON</a><div><a href="#shop">Shop</a><a href="#shop">New</a><a href="#shop">Sale</a><button id="cartbtn">Cart (<span id="count">0</span>)</button></div></nav>
+    <div class="top">
+      <div><h1>Autumn<br />Collection</h1><a class="btn" href="#shop">Shop now</a></div>
+      <div class="art"><i></i></div>
+    </div>
+    <div class="strip">{items.slice(0, 4).map((i) => <a href="#shop" style={`background:${i.c}`}><span>{i.n}</span></a>)}</div>
+  </header>
+  <section id="shop">
+    <div class="head"><h2>New arrivals</h2><p><span id="total">$0</span> in your cart</p></div>
+    <div class="grid">
+      {items.map((i) => (
+        <article>
+          <div class="pic" style={`background:${i.c}`}><i></i></div>
+          <h3>{i.n}</h3>
+          <div class="row"><b>${i.p}</b><button data-p={i.p}>Add to cart</button></div>
+        </article>
+      ))}
+    </div>
+  </section>
+  <style is:global>
+    .maison{background:#fff7ee;color:#1b1b1b}
+    .maison .hero{min-height:min(100vh,800px);padding:0 5vw 40px;display:flex;flex-direction:column}
+    .maison nav{display:flex;justify-content:space-between;align-items:center;padding:34px 0;font-size:16px}
+    .maison .logo{font-weight:700;font-size:26px;letter-spacing:.02em}.maison nav div a{margin-right:30px}
+    .maison nav button{border:0;background:#1b1b1b;color:#fff;padding:10px 18px;border-radius:99px;font-weight:600}
+    .maison .top{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;flex:1;padding:10px 0 34px}
+    .maison h1{margin:0 0 34px;font-size:clamp(50px,7vw,90px);line-height:1.02;letter-spacing:-.04em;font-weight:700}
+    .maison .btn{display:inline-block;padding:19px 44px;border-radius:99px;background:#1b1b1b;color:#fff;font-weight:600;font-size:18px}
+    .maison .art{height:100%;min-height:260px;border-radius:26px;background:#ff7a45;display:grid;place-items:center}
+    .maison .art i{width:34%;aspect-ratio:1;border-radius:50%;background:#fff;animation:maison-bob 5s ease-in-out infinite}
+    @keyframes maison-bob{50%{transform:translateY(-14px) scale(1.04)}}
+    .maison .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+    .maison .strip a{height:clamp(120px,21vw,250px);border-radius:22px;display:flex;align-items:end;padding:18px;font-weight:600;transition:transform .3s}
+    .maison .strip a:hover{transform:translateY(-8px)}
+    .maison section{padding:80px 5vw}
+    .maison .head{display:flex;justify-content:space-between;align-items:end;margin-bottom:34px}.maison h2{margin:0;font-size:clamp(34px,4.4vw,54px);letter-spacing:-.04em}
+    .maison .head p{margin:0;font-weight:600}
+    .maison .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+    .maison .pic{aspect-ratio:1;border-radius:22px;display:grid;place-items:center}.maison .pic i{width:40%;aspect-ratio:3/4;border-radius:14px;background:rgba(255,255,255,.75);transition:transform .4s}
+    .maison article:hover .pic i{transform:rotate(-6deg) scale(1.08)}
+    .maison h3{margin:16px 0 10px;font-size:18px}
+    .maison .row{display:flex;justify-content:space-between;align-items:center}
+    .maison .row button{border:1.5px solid #1b1b1b;background:none;padding:9px 16px;border-radius:99px;font-weight:600;font-size:13px;transition:.2s}
+    .maison .row button:hover{background:#1b1b1b;color:#fff}
+    @media(max-width:860px){.maison .top{grid-template-columns:1fr}.maison .strip,.maison .grid{grid-template-columns:repeat(2,1fr);gap:14px}.maison nav div a{display:none}}
+  </style>
+  <script>
+    let n = 0, t = 0;
+    document.querySelectorAll<HTMLButtonElement>('.maison .row button').forEach((b) => b.addEventListener('click', () => {
+      n++; t += Number(b.dataset.p);
+      document.getElementById('count')!.textContent = String(n);
+      document.getElementById('total')!.textContent = '$' + t;
+      b.textContent = 'Added ✓'; setTimeout(() => (b.textContent = 'Add to cart'), 1200);
+    }));
+    document.getElementById('cartbtn')!.addEventListener('click', () => document.getElementById('shop')!.scrollIntoView());
+  </script>
+</Demo>

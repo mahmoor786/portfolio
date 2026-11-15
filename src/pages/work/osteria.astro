@@ -1,0 +1,73 @@
+---
+import Demo from '../../layouts/Demo.astro';
+const menu = [
+  ['Antipasti', [['Burrata & tomato', 12], ['Beef carpaccio', 14], ['Grilled artichoke', 11]]],
+  ['Pasta', [['Tagliatelle al ragù', 18], ['Cacio e pepe', 16], ['Pumpkin ravioli', 19]]],
+  ['Dolci', [['Tiramisù', 9], ['Panna cotta', 8], ['Affogato', 7]]],
+];
+---
+<Demo title="Osteria" theme="#14110f" cls="osteria">
+  <header class="hero">
+    <nav><a class="logo" href="#">Osteria</a><div><a href="#menu">Menu</a><a href="#book">Book</a></div></nav>
+    <div class="top">
+      <div><h1>Taste the<br />tradition.</h1><a class="btn" href="#book">Book a table</a></div>
+      <div class="plate"><i></i><b></b><u></u></div>
+    </div>
+  </header>
+  <section id="menu">
+    <h2>Tonight's menu</h2>
+    <div class="menu">
+      {menu.map((m) => (
+        <div><h3>{m[0]}</h3>{(m[1] as [string, number][]).map((d) => <p><span>{d[0]}</span><i></i><b>{d[1]}</b></p>)}</div>
+      ))}
+    </div>
+  </section>
+  <section id="book" class="book">
+    <h2>Book a table</h2>
+    <form>
+      <label>Name<input name="name" required placeholder="Your name" /></label>
+      <label>Date<input name="date" type="date" required /></label>
+      <label>Guests<select name="guests"><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label>
+      <button class="btn">Request table</button>
+    </form>
+    <p class="done" hidden></p>
+    <small>Open Tuesday to Sunday, 6pm to late. This is a demo; no booking is sent.</small>
+  </section>
+  <style is:global>
+    .osteria{background:#14110f;color:#f4e3c1;font-family:Georgia,"Times New Roman",serif}
+    .osteria .hero{min-height:min(100vh,800px);padding:0 5vw;display:flex;flex-direction:column;overflow:hidden}
+    .osteria nav{display:flex;justify-content:space-between;align-items:center;padding:34px 0}
+    .osteria .logo{font:italic 700 32px Georgia,serif}.osteria nav div a{margin-left:30px;font-size:17px;opacity:.8}
+    .osteria .top{flex:1;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:30px}
+    .osteria h1{margin:0 0 40px;font-size:clamp(54px,8vw,104px);line-height:1.06;letter-spacing:-.01em}
+    .osteria .btn{display:inline-block;border:0;padding:20px 44px;border-radius:99px;background:#e2542b;color:#fff;font:600 19px "Inter Variable",system-ui,sans-serif;transition:transform .2s}
+    .osteria .btn:hover{transform:scale(1.04)}
+    .osteria .plate{position:relative;justify-self:center;width:min(42vw,540px);aspect-ratio:1;border-radius:50%;background:#e2542b;animation:osteria-spin 40s linear infinite}
+    .osteria .plate i{position:absolute;inset:13%;border-radius:50%;background:#f4e3c1}
+    .osteria .plate b{position:absolute;left:30%;top:28%;width:26%;aspect-ratio:1;border-radius:50%;background:#7da453}
+    .osteria .plate u{position:absolute;left:50%;top:46%;width:22%;aspect-ratio:1;border-radius:50%;background:#c0392b}
+    @keyframes osteria-spin{to{transform:rotate(360deg)}}
+    .osteria section{padding:100px 5vw;border-top:1px solid rgba(244,227,193,.14)}
+    .osteria h2{margin:0 0 50px;font-size:clamp(38px,5vw,64px);font-style:italic}
+    .osteria .menu{display:grid;grid-template-columns:repeat(3,1fr);gap:50px}
+    .osteria h3{color:#e2542b;font-size:24px;margin:0 0 20px}
+    .osteria .menu p{display:flex;align-items:baseline;gap:10px;margin:0 0 16px;font-size:19px}
+    .osteria .menu p i{flex:1;border-bottom:1px dotted rgba(244,227,193,.4)}
+    .osteria form{display:grid;grid-template-columns:repeat(3,1fr) auto;gap:18px;align-items:end;max-width:1000px}
+    .osteria label{display:grid;gap:8px;font:500 14px "Inter Variable",system-ui,sans-serif;opacity:.9}
+    .osteria input,.osteria select{height:58px;border-radius:14px;border:1px solid rgba(244,227,193,.3);background:#1e1a17;color:#f4e3c1;padding:0 16px;font:16px "Inter Variable",system-ui,sans-serif;color-scheme:dark;width:100%}
+    .osteria .done{font-size:24px;color:#e2c46b;margin:30px 0 0}
+    .osteria small{display:block;margin-top:26px;opacity:.55;font:14px "Inter Variable",system-ui,sans-serif}
+    @media(max-width:860px){.osteria .top{grid-template-columns:1fr;padding-bottom:40px}.osteria .plate{width:70vw}.osteria .menu,.osteria form{grid-template-columns:1fr}}
+  </style>
+  <script>
+    const f = document.querySelector<HTMLFormElement>('.osteria form')!;
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d = new FormData(f), out = document.querySelector<HTMLElement>('.osteria .done')!;
+      const when = new Date(String(d.get('date'))).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+      out.textContent = `Grazie, ${d.get('name')}. A table for ${d.get('guests')} on ${when} has been requested.`;
+      out.hidden = false;
+    });
+  </script>
+</Demo>

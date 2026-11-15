@@ -1,0 +1,79 @@
+---
+import Demo from '../../layouts/Demo.astro';
+const feats = [
+  ['Plan', 'Roadmaps, sprints and goals in one shared view your whole team understands.'],
+  ['Build', 'Tasks move themselves as work ships, so nobody has to update a board by hand.'],
+  ['Measure', 'Clear reports show what shipped, what slipped and where time really goes.'],
+];
+const plans = [
+  { n: 'Team', m: 12, y: 9, f: ['Up to 10 people', 'Unlimited projects', 'Weekly reports'] },
+  { n: 'Scale', m: 29, y: 23, f: ['Unlimited people', 'Advanced permissions', 'Priority support'], hot: true },
+];
+---
+<Demo title="Orbit" theme="#4b2bff" cls="orbit">
+  <header class="hero">
+    <nav><a class="logo" href="#">◆ orbit</a><div><a href="#product">Product</a><a href="#pricing">Pricing</a><a href="#pricing">Login</a></div></nav>
+    <div class="copy">
+      <h1>Launch faster.<br />Grow further.</h1>
+      <p>The all-in-one platform for modern teams</p>
+      <a class="btn" href="#pricing">Get started</a>
+    </div>
+    <div class="cards">{feats.map((f) => <div><b>{f[0]}</b><span></span><span></span><span class="s"></span></div>)}</div>
+  </header>
+  <section id="product">
+    <h2>Everything your team needs<br />to ship on time.</h2>
+    <div class="feats">{feats.map((f, i) => <article><em>0{i + 1}</em><h3>{f[0]}</h3><p>{f[1]}</p></article>)}</div>
+  </section>
+  <section id="pricing" class="pricing">
+    <h2>Simple pricing.</h2>
+    <div class="toggle"><button class="on" data-k="m">Monthly</button><button data-k="y">Yearly <i>save 20%</i></button></div>
+    <div class="plans">
+      {plans.map((p) => (
+        <article class={p.hot ? 'hot' : ''}>
+          <h3>{p.n}</h3>
+          <div class="price">$<b data-m={p.m} data-y={p.y}>{p.m}</b><small>/ person / month</small></div>
+          <ul>{p.f.map((f) => <li>{f}</li>)}</ul>
+          <a class="btn" href="#">Start free trial</a>
+        </article>
+      ))}
+    </div>
+  </section>
+  <style is:global>
+    .orbit{background:#fff;color:#0f1030}
+    .orbit .hero{position:relative;min-height:min(100vh,800px);padding:0 5vw;display:flex;flex-direction:column;color:#fff;overflow:hidden;background:linear-gradient(125deg,#4b2bff,#19c2ff)}
+    .orbit nav{display:flex;justify-content:space-between;align-items:center;padding:34px 0;font-size:16px}
+    .orbit .logo{font-weight:700;font-size:26px;letter-spacing:-.02em}.orbit nav div a{margin-left:30px;opacity:.9}
+    .orbit .copy{text-align:center;margin:auto 0;padding:30px 0}
+    .orbit h1{margin:0;font-weight:700;font-size:clamp(46px,7.6vw,96px);line-height:1.08;letter-spacing:-.035em}
+    .orbit .copy p{font-size:clamp(17px,2.2vw,28px);opacity:.8;margin:26px 0 34px}
+    .orbit .btn{display:inline-block;padding:20px 52px;border-radius:99px;background:#fff;color:#4b2bff;font-weight:600;font-size:clamp(17px,2vw,24px);transition:transform .2s}
+    .orbit .btn:hover{transform:translateY(-3px)}
+    .orbit .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:4vw;padding:0 6vw;margin-bottom:-40px}
+    .orbit .cards div{height:190px;border-radius:24px 24px 0 0;background:rgba(255,255,255,.18);padding:26px;backdrop-filter:blur(6px)}
+    .orbit .cards b{display:block;font-size:19px;margin-bottom:18px}
+    .orbit .cards span{display:block;height:10px;border-radius:9px;background:rgba(255,255,255,.35);margin-bottom:12px}.orbit .cards .s{width:55%}
+    .orbit section{padding:110px 5vw;text-align:center}
+    .orbit h2{margin:0 0 60px;font-size:clamp(34px,4.6vw,56px);line-height:1.08;letter-spacing:-.035em}
+    .orbit .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;text-align:left;max-width:1160px;margin:0 auto}
+    .orbit .feats article{padding:34px;border-radius:24px;background:#f3f5ff}
+    .orbit em{font-style:normal;font-weight:700;color:#4b2bff}.orbit h3{font-size:26px;margin:14px 0 10px;letter-spacing:-.02em}.orbit article p{margin:0;line-height:1.55;color:#4a4d6a}
+    .orbit .pricing{background:#f3f5ff}.orbit .pricing h2{margin-bottom:28px}
+    .orbit .toggle{display:inline-flex;background:#fff;border-radius:99px;padding:5px;margin-bottom:44px}
+    .orbit .toggle button{border:0;background:none;padding:11px 22px;border-radius:99px;font-weight:600;color:#4a4d6a}
+    .orbit .toggle .on{background:#4b2bff;color:#fff}.orbit .toggle i{font-style:normal;font-size:12px;opacity:.8;margin-left:4px}
+    .orbit .plans{display:grid;grid-template-columns:repeat(2,minmax(0,380px));gap:24px;justify-content:center;text-align:left}
+    .orbit .plans article{background:#fff;border-radius:28px;padding:36px}
+    .orbit .plans .hot{background:linear-gradient(125deg,#4b2bff,#19c2ff);color:#fff}
+    .orbit .price{font-size:26px;font-weight:700;margin:8px 0 20px}.orbit .price b{font-size:64px;letter-spacing:-.04em}.orbit .price small{font-size:14px;font-weight:500;opacity:.6;margin-left:8px}
+    .orbit ul{list-style:none;padding:0;margin:0 0 28px}.orbit li{padding:11px 0;border-top:1px solid rgba(120,130,180,.22)}
+    .orbit .plans .btn{display:block;text-align:center;font-size:16px;padding:16px;background:#0f1030;color:#fff}.orbit .hot .btn{background:#fff;color:#4b2bff}
+    @media(max-width:820px){.orbit .feats,.orbit .plans{grid-template-columns:1fr}.orbit .cards{gap:12px;padding:0}.orbit .cards div{height:130px;padding:16px}.orbit nav div a{margin-left:18px}}
+  </style>
+  <script>
+    const tb = document.querySelectorAll<HTMLButtonElement>('.orbit .toggle button');
+    tb.forEach((b) => b.addEventListener('click', () => {
+      tb.forEach((x) => x.classList.toggle('on', x === b));
+      document.querySelectorAll<HTMLElement>('.orbit .price b').forEach((p) => (p.textContent = p.dataset[b.dataset.k!]!));
+    }));
+  </script>
+</Demo>

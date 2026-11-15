@@ -1,0 +1,20 @@
+---
+import { site } from '../data/site';
+import { url } from '../data/url';
+---
+<footer class="foot">
+  <div class="wrap">
+    <div class="big" aria-hidden="true">{site.name}</div>
+    <div class="row">
+      <div>© {new Date().getFullYear()} {site.name}. All rights reserved.</div>
+      <nav aria-label="Footer">
+        <a href={url('/#services')}>Services</a>
+        <a href={url('/#work')}>Work</a>
+        {site.show.pricing && <a href={url('/#pricing')}>Pricing</a>}
+        {site.show.blog && <a href={url('/blog/')}>Blog</a>}
+        <a href={url('/#contact')}>Contact</a>
+        <a href="#main">Back to top ↑</a>
+      </nav>
+    </div>
+  </div>
+</footer>

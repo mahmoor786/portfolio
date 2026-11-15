@@ -1,0 +1,36 @@
+---
+import '@fontsource-variable/inter';
+import { url } from '../data/url';
+interface Props { title: string; theme: string; cls: string }
+const { title, theme, cls } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content={theme} />
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <title>{title} — concept project by Mahmoor Ullah</title>
+  </head>
+  <body class={cls}>
+    <slot />
+    <a class="concept-bar" href={url('/#work')}>
+      <span>Concept project</span> Designed &amp; built by Mahmoor Ullah <b>← Back to portfolio</b>
+    </a>
+    <style is:global>
+      *,*::before,*::after{box-sizing:border-box}
+      html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+      body{margin:0;font-family:"Inter Variable",Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:64px}
+      a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}
+      img{max-width:100%}
+      .concept-bar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:50;display:flex;gap:10px;align-items:center;
+        padding:10px 16px;border-radius:99px;background:rgba(20,20,24,.88);color:#fff;font:500 13px/1 "Inter Variable",system-ui,sans-serif;
+        white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.3);backdrop-filter:blur(10px);max-width:calc(100vw - 24px)}
+      .concept-bar span{padding:5px 9px;border-radius:99px;background:#7a5cff;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+      .concept-bar b{font-weight:600;margin-left:6px;opacity:.85}
+      @media(max-width:560px){.concept-bar{font-size:0;gap:8px}.concept-bar span,.concept-bar b{font-size:12px;margin:0}}
+    </style>
+  </body>
+</html>

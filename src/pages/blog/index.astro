@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { site } from '../../data/site';
+import { url } from '../../data/url';
+import { getPosts } from '../../data/posts';
+const posts = await getPosts();
+const jsonld = [{
+  '@context': 'https://schema.org', '@type': 'Blog', name: `${site.name} — Blog`, url: new URL(url('/blog/'), Astro.site).href,
+  blogPost: posts.map((p) => ({ '@type': 'BlogPosting', headline: p.data.title, url: new URL(url(`/blog/${p.id}/`), Astro.site).href, datePublished: p.data.date.toISOString() })),
+}];
+---
+<Base title="Blog" description="Practical articles on web design, landing pages, online stores and getting more from your website." jsonld={jsonld}>
+  <section class="page">
+    <div class="bg"></div>
+    <div class="wrap">
+      <p class="k">Blog</p>
+      <h1>Notes on building websites that work.</h1>
+      <p class="sub">Practical advice on design, speed and getting more customers from your website.</p>
+      {posts.length ? <div class="posts">{posts.map((p, i) => <PostCard post={p} i={i} h="h2" />)}</div> : <p class="sub">The first articles are on their way.</p>}
+    </div>
+  </section>
+</Base>
